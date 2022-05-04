@@ -254,7 +254,7 @@ def locate_batch_num_for_patient(patient_class,patient_id,partition_file_path):
     
 # function: check affine from all time frames (affine may have errors in some tf, that's why we need to find the mode )
 def check_affine(one_time_frame_file_name):
-    """this function uses the affine with each element as the mode in all time frames"""
+    """this function gets the affine matrix of the CT image without the potential errors by checking all time frames"""
     joinpath = os.path.join(os.path.dirname(one_time_frame_file_name),'*.nii.gz')
     f = np.array(sorted(glob.glob(joinpath)))
     a = np.zeros((4,4,len(f)))
@@ -279,7 +279,7 @@ def convert_coordinates(target_affine, initial_affine, r):
     return apply_affine(affine_multiply,r)
 
 # function: get affine matrix from translation,x,y and scale
-def get_affine_from_vectors(mpr_data,volume_affine,vector,zoom):
+def get_affine_from_vectors(mpr_data,volume_affine,vector,zoom = 1.0):
     # it answers one important question: what's [1 1 1] in the coordinate system of predicted plane in that
     # of the whole CT volume
    

@@ -206,3 +206,17 @@ class Make_Planes():
 
         # save
         Image.fromarray((I * 255).astype('uint8')).save(save_path)
+
+
+class Prepare_premier(Prepare):
+    def __init__(self, main_folder,patient_class,patient_id,batch_i,pixel_spacing,plane_image_size):
+        super().__init__(main_folder,patient_class,patient_id,batch_i,pixel_spacing,plane_image_size)
+        
+    
+    def load_plane_vectors_high_res(self):
+        vector_2C = ff.get_ground_truth_vectors(os.path.join(self.main_folder,self.patient_class,self.patient_id,'vector-pred-high-res-0.625','pred_2C.npy'))
+        vector_3C = ff.get_ground_truth_vectors(os.path.join(self.main_folder,self.patient_class,self.patient_id,'vector-pred-high-res-0.625','pred_3C.npy'))
+        vector_4C = ff.get_ground_truth_vectors(os.path.join(self.main_folder,self.patient_class,self.patient_id,'vector-pred-high-res-0.625','pred_4C.npy'))
+        vector_SA = ff.get_ground_truth_vectors(os.path.join(self.main_folder,self.patient_class,self.patient_id,'vector-pred-high-res-0.625','pred_BASAL.npy'))
+        image_center = vector_2C['img_center']
+        return image_center, vector_2C, vector_3C, vector_4C, vector_SA
