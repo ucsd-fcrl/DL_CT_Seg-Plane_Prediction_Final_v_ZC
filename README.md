@@ -15,7 +15,7 @@ The purpose of this GitHub repo is to use trained DL models to predict chamber s
 This repo has two sets of scripts: **Main and Premier**.<br />
 - **Main**: because the input of DL model has to be the under-sampled CT volumes (pixel_dim = 1.5mm), "Main" can return you the segmentations and planes in *low resolution*.<br />
     - You may have multiple trained models (trained on different datasets) acting like multiple human experts (some of which may make mistakes sometimes). Thus, the other important purpose of "Main" is to let you select which model gives you the adequate results.<br />
-- **Premier**: turn the low resolution DL outputs into high resolution (pixel_dim = 0.625)
+- **Premier**: turn the low resolution DL outputs into *high* resolution (pixel_dim = 0.625)
 
 
 ## User Guideline
@@ -40,15 +40,14 @@ Generate low-resolution segmentation and a cine movie of cardiac imaging planes 
 ### Premier
 Generate high resolution segmentation and plane movie (showing cardiac function with more details).<br />
 #### Plane movie
-Notice!: it's not done by simple upsampling of low-resolution results wihch will not give you high-resolution details. It's done by use the info from DL outputs to directly make planes from the high-resolution CT image.<br />
+Notice!: it's not done by simple upsampling of low-resolution results which will not give you high-resolution details. It's done by directly making planes from the high-resolution CT image.<br />
 - step 1: save low-res plane into NifTi images. script: ```premier_step1.py```<br />
 - step 2: upsample NifTi images. script: ```./premier_step2_upsample_plane.sh```<br />
-- step 3: extract plane vector from high-res NifTi images and directly make high-res plane movie from high-resolution CT. script: ```premier_step3.py``` <br />
+- step 3: extract plane vectors from high-res NifTi images and directly make high-res plane movie from high-resolution CT. script: ```premier_step3.py``` <br />
+The final high-resolution cine movie of planes can be found in ```example_files/Example_plane_cine.mp4```
 #### Segmentation
 We highly recommend to do the high-resolution segmentation using [a 2D U-Net](https://github.com/zhennongchen/2DUNet_CT_Seg_Final_v_ZC) instead of the model used here.
 
-
-The final high-resolution cine movie of planes can be found in ```example_files/Example_plane_cine.mp4```
 
 ### Additional guidelines 
 see comments in the script
