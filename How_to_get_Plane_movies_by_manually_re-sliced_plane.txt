@@ -1,0 +1,12 @@
+Step1: manually reslice planes (name:2C, 3C, 4C and SAX) in Horos, export the dicom images and saved in a folder "mpr-dcm"
+
+Step2: Copy MPR folder to Desktop, run tool_convert-dicom-to-nii-mpr.sh in local terminal, copy back to External Drive
+
+Step3: Transfer MPR to NAS
+
+Step4: run tool_rseample_mpr.sh in octomore, the resampled mpr images are saved in local folder "Resample_MPR" in octomore, which then gets transfered back to NAS
+
+Step5: run tool_extract_affine.py to get the vectors
+
+Step6: run tool_generate_manual_plane_images.py
+
