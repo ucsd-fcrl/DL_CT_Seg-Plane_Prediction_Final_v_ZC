@@ -11,7 +11,7 @@
 -  You can also adjust the zoom_factor for LAX and SAX plane if the LV looks too small/large.
 -  Finally, You put your model_set selection along with the adjusted zoom factors into a spreadsheet.
 
--  an example spreadsheet can be found in example_files/model_set_selection.xlsx
+-  an example spreadsheet can be found in example_files/model_set_selection_example.xlsx
 '''
 
 # prepare a spreadsheet
