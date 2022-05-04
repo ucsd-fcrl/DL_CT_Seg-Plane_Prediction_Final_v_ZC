@@ -79,9 +79,9 @@ for i in model_sets:
 
       # find the input images for time frames:
       if task_list[task_num] == 's':
-        img_list = ff.sort_timeframe(ff.find_all_target_files(['img-nii-1.5/*.nii.gz'],p),2) # predict segmentation for all time frames
+        img_list = ff.sort_timeframe(ff.find_all_target_files(['img-nii-' + str(cg.low_res_spacing) + '/*.nii.gz'],p),2) # predict segmentation for all time frames
       else:
-        img_list = ff.find_all_target_files(['img-nii-1.5/0.nii.gz'],p) # only need one time frame to predict planes
+        img_list = ff.find_all_target_files(['img-nii-' + str(cg.low_res_spacing) + '/0.nii.gz'],p) # only need one time frame to predict planes
 
 
       for img in img_list:

@@ -17,9 +17,9 @@ class Prepare():
         self.pixel_spacing = pixel_spacing
         self.plane_image_size = plane_image_size
 
-    def load_plane_vectors(self, batch_select = False, select_list = [0,0,0,0]):
+    def load_plane_vectors(self, batch_select = False, select_list = [0,0,0,0], normal_vector_flip = False):
         patient_path = os.path.join(self.main_folder,self.patient_class,self.patient_id)
-        volume_dim = nib.load(os.path.join(cg.image_data_dir,self.patient_class,self.patient_id,'img-nii-1.5/0.nii.gz')).shape
+        volume_dim = nib.load(os.path.join(cg.image_data_dir,self.patient_class,self.patient_id,'img-nii-'+str(self.pixel_spacing),'0.nii.gz')).shape
         image_center = np.array([(volume_dim[0]-1)/2,(volume_dim[1]-1)/2,(volume_dim[-1]-1)/2]) 
         scale = [1,1,0.67] # default
 
@@ -35,20 +35,23 @@ class Prepare():
             vector_3C = ff.get_predicted_vectors(os.path.join(patient_path,'vector-pred/batch_'+str(select_list[1]),'pred_3C_t.npy'),os.path.join(patient_path,'vector-pred/batch_'+str(select_list[1]),'pred_3C_r.npy'),scale, image_center)
             vector_4C = ff.get_predicted_vectors(os.path.join(patient_path,'vector-pred/batch_'+str(select_list[2]),'pred_4C_t.npy'),os.path.join(patient_path,'vector-pred/batch_'+str(select_list[2]),'pred_4C_r.npy'),scale, image_center)
             vector_SA = ff.get_predicted_vectors(os.path.join(patient_path,'vector-pred/batch_'+str(select_list[3]),'pred_BASAL_t.npy'),os.path.join(patient_path,'vector-pred/batch_'+str(select_list[3]),'pred_BASAL_r.npy'),scale, image_center)
-        
-        return image_center, vector_2C, vector_3C, vector_4C, vector_SA
+        if normal_vector_flip == False:
+            normal_vector = ff.normalize(np.cross(vector_SA['x'],vector_SA['y']))
+        else:  # this is specific for SAX planes made by Horos/OsiriX
+            normal_vector = -ff.normalize(np.cross(vector_SA['x'],vector_SA['y']))
+
+        return image_center, vector_2C, vector_3C, vector_4C, vector_SA, normal_vector
 
 
     def obtain_affine_matrix(self,vector_2C, vector_3C, vector_4C):
-        volume_affine = ff.check_affine(os.path.join(cg.image_data_dir,self.patient_class,self.patient_id,'img-nii-1.5/0.nii.gz'))
+        volume_affine = ff.check_affine(os.path.join(cg.image_data_dir,self.patient_class,self.patient_id,'img-nii-'+str(self.pixel_spacing),'0.nii.gz'))
         A_2C = ff.get_affine_from_vectors(np.zeros(self.plane_image_size),volume_affine,vector_2C,1.0)
         A_3C = ff.get_affine_from_vectors(np.zeros(self.plane_image_size),volume_affine,vector_3C,1.0)
         A_4C = ff.get_affine_from_vectors(np.zeros(self.plane_image_size),volume_affine,vector_4C,1.0)
         return volume_affine, A_2C, A_3C, A_4C
 
 
-    def define_SAX_range(self,vector_SA,image_center,seg_LV, batch_index, txt_write = True):
-        normal_vector = ff.normalize(np.cross(vector_SA['x'],vector_SA['y'])) 
+    def define_SAX_range(self,vector_SA,image_center,normal_vector, seg_LV, batch_index, txt_write = True):
         pixel_dim = math.sqrt((self.pixel_spacing**2)*3) # default = 2.59 = SQRT((1.5^2)*3)
 
         a,b = ff.find_num_of_slices_in_SAX(np.zeros(self.plane_image_size),image_center,vector_SA['t'],vector_SA['x'],vector_SA['y'],seg_LV,0,pixel_dim)
@@ -59,10 +62,9 @@ class Prepare():
             t_file.close()
         return a,b
 
-    def define_SAX_planes_center_list(self,vector_SA, image_center,a,b):
+    def define_SAX_planes_center_list(self,vector_SA, image_center,a,b,normal_vector):
         # define the plane center coordinates for 9 SAX planes in the SAX stack
         pixel_dim = math.sqrt((self.pixel_spacing ** 2)*3) # default = 2.59 = SQRT((1.5^2)*3)
-        normal_vector = ff.normalize(np.cross(vector_SA['x'],vector_SA['y'])) 
         # center list of the whole SAX stack
         center_list = ff.find_center_list_whole_stack(image_center + vector_SA['t'],normal_vector,a,b,8,pixel_dim)
         # center list of the 9 SAX planes
@@ -213,10 +215,16 @@ class Prepare_premier(Prepare):
         super().__init__(main_folder,patient_class,patient_id,batch_i,pixel_spacing,plane_image_size)
         
     
-    def load_plane_vectors_high_res(self):
-        vector_2C = ff.get_ground_truth_vectors(os.path.join(self.main_folder,self.patient_class,self.patient_id,'vector-pred-high-res-0.625','pred_2C.npy'))
-        vector_3C = ff.get_ground_truth_vectors(os.path.join(self.main_folder,self.patient_class,self.patient_id,'vector-pred-high-res-0.625','pred_3C.npy'))
-        vector_4C = ff.get_ground_truth_vectors(os.path.join(self.main_folder,self.patient_class,self.patient_id,'vector-pred-high-res-0.625','pred_4C.npy'))
-        vector_SA = ff.get_ground_truth_vectors(os.path.join(self.main_folder,self.patient_class,self.patient_id,'vector-pred-high-res-0.625','pred_BASAL.npy'))
+    def load_plane_vectors_high_res(self, vector_folder, normal_vector_flip = False):
+        vector_2C = ff.get_ground_truth_vectors(os.path.join(self.main_folder,self.patient_class,self.patient_id,vector_folder,'pred_2C.npy'))
+        vector_3C = ff.get_ground_truth_vectors(os.path.join(self.main_folder,self.patient_class,self.patient_id,vector_folder,'pred_3C.npy'))
+        vector_4C = ff.get_ground_truth_vectors(os.path.join(self.main_folder,self.patient_class,self.patient_id,vector_folder,'pred_4C.npy'))
+        vector_SA = ff.get_ground_truth_vectors(os.path.join(self.main_folder,self.patient_class,self.patient_id,vector_folder,'pred_BASAL.npy'))
         image_center = vector_2C['img_center']
-        return image_center, vector_2C, vector_3C, vector_4C, vector_SA
+
+        if normal_vector_flip == False:
+            normal_vector = ff.normalize(np.cross(vector_SA['x'],vector_SA['y'])) 
+        else:
+            normal_vector = -ff.normalize(np.cross(vector_SA['x'],vector_SA['y'])) 
+
+        return image_center, vector_2C, vector_3C, vector_4C, vector_SA, normal_vector

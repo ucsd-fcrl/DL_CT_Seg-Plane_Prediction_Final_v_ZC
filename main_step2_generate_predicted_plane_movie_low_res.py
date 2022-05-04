@@ -2,7 +2,7 @@
 
 # this script uses the predicted plane vectors to generates a cine movie of cardiac imaging planes
 # including three LAX planes + A SAX stack (9 planes from mitral valve plane to LV apex) in low resolution (pixel_dim = 1.5mm)
-# see example_files/Example_plane_cine_image.mp4 for an examplar DL product
+# see an example of this movie in example_files/Example_plane_cine_image.mp4 (this example is in high-resolution, which requires the premier version of this repo)
 
 import function_list as ff
 import os
@@ -46,24 +46,24 @@ for i in model_sets:
 
         # load plane vectors
         prepare = Prepare(main_folder,patient_class,patient_id,i,cg.low_res_spacing,cg.low_res_dim)
-        image_center, vector_2C, vector_3C, vector_4C, vector_SA = prepare.load_plane_vectors()
+        image_center, vector_2C, vector_3C, vector_4C, vector_SA, normal_vector_SA = prepare.load_plane_vectors()
 
         # get affine matrices
         volume_affine, A_2C, A_3C, A_4C = prepare.obtain_affine_matrix(vector_2C, vector_3C, vector_4C)
         
         # define the range of SAX stack using the LV segmentation
         # we will obtain two numbers "a" and "b", which means the LV SAX stack should start "a" sclices ahead of the predicted BASAL plane and ends "b" slices after the BASAL plane
-        a , b = prepare.define_SAX_range(vector_SA,image_center,seg_LV, i)
+        a , b = prepare.define_SAX_range(vector_SA,image_center,normal_vector_SA, seg_LV, i, True)
 
 
         # get a center list of 9-plane SAX stack
-        _, center_list9, gap = prepare.define_SAX_planes_center_list(vector_SA, image_center, a, b)
+        _, center_list9, gap = prepare.define_SAX_planes_center_list(vector_SA, image_center, a, b, normal_vector_SA)
         if gap < 1:
             print('no intact LV segmentation')
             continue
 
         # get the image list
-        img_list = ff.sort_timeframe(ff.find_all_target_files(['img-nii-1.5/*.nii.gz'],os.path.join(cg.image_data_dir,patient_class,patient_id)),2)
+        img_list = ff.sort_timeframe(ff.find_all_target_files(['img-nii-'+str(cg.low_res_spacing)+'/*.nii.gz'],os.path.join(cg.image_data_dir,patient_class,patient_id)),2)
 
         # make the plane images for each time frame
         for img in img_list:
@@ -77,13 +77,7 @@ for i in model_sets:
         # make cine movie
         pngs = ff.sort_timeframe(ff.find_all_target_files(['*.png'],os.path.join(save_folder,'pngs')),1)
         save_movie_path = os.path.join(save_folder,patient_id+'_planes.mp4')
-        if len(pngs) == 16:
-            fps = 15 # set 16 will cause bug
-        elif len(pngs) > 20:
-            fps = len(pngs)//2
-        else:
-            fps = len(pngs)
-        ff.make_movies(save_movie_path,pngs,fps)
+        ff.make_movies(save_movie_path,pngs)
 
     print('finish model set ',i)
 

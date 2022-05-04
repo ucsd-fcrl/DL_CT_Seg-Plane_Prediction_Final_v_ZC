@@ -545,7 +545,7 @@ def set_scale_for_unequal_x_and_y(vector,zoom_factor = 1):
 
     
 # function: make movies of several .png files
-def make_movies(save_path,pngs,fps):
+def make_movies(save_path,pngs,fps = 10):
     mpr_array=[]
     i = cv2.imread(pngs[0])
     h,w,l = i.shape
@@ -554,6 +554,13 @@ def make_movies(save_path,pngs,fps):
         img = cv2.imread(j)
         mpr_array.append(img)
 
+    # set fps
+    if len(pngs) == 16:
+        fps = 15 # set 16 will cause bug
+    elif len(pngs) > 20:
+        fps = len(pngs)//2
+    else:
+        fps = len(pngs)
 
     # save movies
     out = cv2.VideoWriter(save_path,cv2.VideoWriter_fourcc(*'mp4v'),fps,(w,h))
