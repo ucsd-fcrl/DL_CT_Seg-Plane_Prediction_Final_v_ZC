@@ -8,12 +8,12 @@ import os
 import numpy as np
 import nibabel as nib 
 import pandas as pd
-import supplement
+import supplements
 from Extract_vector_from_affines import *
 from Make_plane_movies import *
 
 
-cg = supplement.Experiment()
+cg = supplements.Experiment()
 WL = 500
 WW = 800
 

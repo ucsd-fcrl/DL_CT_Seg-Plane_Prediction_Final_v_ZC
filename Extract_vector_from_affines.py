@@ -6,11 +6,11 @@ import os
 import numpy as np
 import nibabel as nib
 from nibabel.affines import apply_affine
-import supplement
-import supplement.utils as ut
+import supplements
+import supplements.utils as ut
 import math
 import function_list as ff
-cg = supplement.Experiment()
+cg = supplements.Experiment()
 
 o = [0,0,0]
 x1 = [1,0,0]

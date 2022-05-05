@@ -14,9 +14,9 @@ from scipy.ndimage.measurements import center_of_mass
 
 # Internal
 import dvpy as dv
-import supplement
+import supplements
 
-cg = supplement.Experiment()
+cg = supplements.Experiment()
 
 
 def in_adapt(x, target = cg.dim):

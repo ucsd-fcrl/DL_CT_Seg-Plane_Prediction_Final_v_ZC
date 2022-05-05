@@ -13,12 +13,12 @@ from keras.layers import Input, \
 from keras.initializers import Orthogonal
 from keras.regularizers import l2
 
-import supplement
-import supplement.utils as ut
+import supplements
+import supplements.utils as ut
 import dvpy as dv
 import dvpy.tf
 import function_list as ff
-cg = supplement.Experiment()
+cg = supplements.Experiment()
 
 
 class Build_Model():

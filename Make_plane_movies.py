@@ -3,9 +3,9 @@ import os
 import math
 import numpy as np
 import nibabel as nib 
-import supplement
+import supplements
 from PIL import Image
-cg = supplement.Experiment()
+cg = supplements.Experiment()
 
 
 class Prepare():

@@ -18,9 +18,9 @@
 import function_list as ff
 import os
 import numpy as np
-import supplement
+import supplements
 import pandas as pd
-cg = supplement.Experiment()
+cg = supplements.Experiment()
 
 patient_list = ff.find_all_target_files(['Abnormal/CVC1803*'],os.path.join(cg.save_dir,'DL_prediction_low_res'))
 

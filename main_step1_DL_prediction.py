@@ -16,11 +16,11 @@ import os
 # Third Party
 import numpy as np
 import nibabel as nb
-import supplement
-import supplement.utils as ut
+import supplements
+import supplements.utils as ut
 import function_list as ff
 from build_DL_model import *
-cg = supplement.Experiment()
+cg = supplements.Experiment()
 
 ######### Define models
 ######### in total there are 5 sets of trained model numbered from 0 to 4, define which sets you want to use.

@@ -9,11 +9,11 @@ import function_list as ff
 import os
 import numpy as np
 import nibabel as nib 
-import supplement
+import supplements
 import pandas as pd
 from PIL import Image
 from Make_plane_movies import *
-cg = supplement.Experiment()
+cg = supplements.Experiment()
 
 WL = 500
 WW = 800  

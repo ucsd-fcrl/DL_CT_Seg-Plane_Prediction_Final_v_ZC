@@ -11,10 +11,10 @@ import os
 import math
 import numpy as np
 import nibabel as nib 
-import supplement
+import supplements
 import pandas as pd
 from Make_plane_movies import *
-cg = supplement.Experiment()
+cg = supplements.Experiment()
 
 WL = 500
 WW = 800  
