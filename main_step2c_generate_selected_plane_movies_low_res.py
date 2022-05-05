@@ -63,7 +63,7 @@ for patient in patient_list:
     else: # txt file has not been made
         seg = nib.load(os.path.join(patient,'seg-pred/batch_'+str(model_set_pick[0]),'pred_s_0.nii.gz'))
         seg_LV = seg.get_fdata()
-        a , b = prepare.define_SAX_range(vector_SA,image_center,normal_vector_SA, seg_LV, model_set_pick[-1])
+        a , b = prepare.define_SAX_range(vector_SA,image_center, seg_LV, model_set_pick[-1])
  
     # get a center list of 9-plane SAX stack
     _, center_list9, gap = prepare.define_SAX_planes_center_list(vector_SA, image_center, a, b, normal_vector_SA)

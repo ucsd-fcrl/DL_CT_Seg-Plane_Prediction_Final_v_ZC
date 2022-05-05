@@ -51,7 +51,7 @@ class Prepare():
         return volume_affine, A_2C, A_3C, A_4C
 
 
-    def define_SAX_range(self,vector_SA,image_center,normal_vector, seg_LV, batch_index, txt_write = True):
+    def define_SAX_range(self,vector_SA,image_center, seg_LV, batch_index, txt_write = True):
         pixel_dim = math.sqrt((self.pixel_spacing**2)*3) # default = 2.59 = SQRT((1.5^2)*3)
 
         a,b = ff.find_num_of_slices_in_SAX(np.zeros(self.plane_image_size),image_center,vector_SA['t'],vector_SA['x'],vector_SA['y'],seg_LV,0,pixel_dim)

@@ -53,7 +53,7 @@ for i in model_sets:
         
         # define the range of SAX stack using the LV segmentation
         # we will obtain two numbers "a" and "b", which means the LV SAX stack should start "a" sclices ahead of the predicted BASAL plane and ends "b" slices after the BASAL plane
-        a , b = prepare.define_SAX_range(vector_SA,image_center,normal_vector_SA, seg_LV, i, True)
+        a , b = prepare.define_SAX_range(vector_SA,image_center, seg_LV, i, True)
 
 
         # get a center list of 9-plane SAX stack
