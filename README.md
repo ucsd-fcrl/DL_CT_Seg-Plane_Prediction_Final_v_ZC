@@ -29,6 +29,7 @@ The entire code is [containerized](https://www.docker.com/resources/what-contain
     - you need to update the file paths of these trained models into ```Build_DL_model.py```.<br />
 - Then, you should re-sample your CT image into uniform pixel dimension. For **Main** (low-res): re-sample to 1.5mm. For **Premier**: re-sample to 0.625mm.<br />
     - do it by runnning ```./tool_resample_by_c3d.sh```.<br />
+- Last, set some default parameters for the experiments by running ```. ./defaults.sh```
 
 ### Main
 Generate low-resolution segmentation and a cine movie of cardiac imaging planes (showing cardiac function across the cycle).<br />
