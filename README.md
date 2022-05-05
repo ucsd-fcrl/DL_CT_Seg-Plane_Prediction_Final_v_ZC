@@ -1,5 +1,5 @@
 # Use Trained DL Model to Predict Segmentation and Cardiac Imaging Planes
-**Author: Zhennong Chen, PhD**<br />
+xww
 
 This is the GitHub repo based on a published paper: <br />
 *Automated Cardiac Volume Assessment and Cardiac Long- and Short-Axis Imaging Plane Prediction from ECG-gated CT Volumes Enabled By Deep Learning*<br />

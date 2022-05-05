@@ -22,16 +22,12 @@ import function_list as ff
 from build_DL_model import *
 cg = supplement.Experiment()
 
-######### Define models 
-build_model = Build_Model()
-model = build_model.build # model architecture
-MODEL_list = build_model.model_list # pre-trained model list (in total there are 5 sets of models)
-
+######### Define models
 ######### in total there are 5 sets of trained model numbered from 0 to 4, define which sets you want to use.
 model_sets = [0,1,2,3,4] # want to use all the sets
 
 ######### in total we have 9 tasks:
-# chamber segmentation + predict (a) translation vecotr "t" and (b) directional vector "r" for 4 planes (2CH, 3CH, 4CH and SAX): 1 + 4 x 2 = 9 tasks
+# chamber segmentation + predict (1) translation vecotr "t" and (2) directional vector "r" for 4 planes (2CH, 3CH, 4CH and SAX): 1 + 4 x 2 = 9 tasks
 task_list = ['s','2C_t','2C_r','3C_t','3C_r','4C_t','4C_r','BASAL_t','BASAL_r'] 
 # define which tasks you want to do:
 task_num_list = [0,1,2,3,4,5,6,7,8]  # want to do all of them
@@ -47,6 +43,11 @@ ff.make_folder([save_folder])
 
 
 # Main script (usually no need to change):
+# build model
+build_model = Build_Model()
+model = build_model.build # model architecture
+MODEL_list = build_model.model_list # pre-trained model list (in total there are 5 sets of models)
+
 for i in model_sets:
   model_set = build_model.select_one_model_set(i)
 
