@@ -116,7 +116,7 @@ def turn_to_pixel(vec,size=[160,160,96]):
 # function: extract vectors from numpy file
 def get_ground_truth_vectors(filename):
     a = np.load(os.path.join(filename),allow_pickle=True)
-    [t,x,y,s,img_center] = [a[0],a[2],a[3],a[6],a[5]]
+    [t,x,y,s,img_center] = [a[0],a[2],a[3],a[6],a[5]]  # be very careful to these indexes, refer to Extract_vector_from_affine.py, function get_vector_from_affines
     result = {'t':t,'x':x,'y':y,'s':s,'img_center':img_center}
     return result
 
