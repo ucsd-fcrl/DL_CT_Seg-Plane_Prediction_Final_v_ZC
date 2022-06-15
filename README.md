@@ -27,7 +27,7 @@ The entire code is [containerized](https://www.docker.com/resources/what-contain
 
 ### Data Preparation
 - First of all, you need to prepare your trained models (i.e., by [this GitHub repo](https://github.com/ucsd-fcrl/AI_chamber_segmentation_plane_re-slicing)).<br />
-    - you need to update the file paths of these trained models into ```Build_DL_model.py```.<br />
+    - you need to update the file paths of these trained models in ```Build_DL_model.py```, function "get_model_list".<br />
 - Then, you should re-sample your CT image into uniform pixel dimension. For **Main** (low-res): re-sample to 1.5mm. For **Premier**: re-sample to 0.625mm.<br />
     - do it by runnning ```./tool_resample_by_c3d.sh```.<br />
 - Last, set some default parameters for the experiments by running ```. ./defaults.sh```
